@@ -43,7 +43,8 @@ self.addEventListener('notificationclick', (event) => {
         if (ml) target.postMessage({ type: 'quick-log', ml })
         return target.focus()
       }
-      return self.clients.openWindow(ml ? `/?action=log&ml=${ml}` : '/')
+      // Relative to the SW scope so this survives a /repo/ subpath on Pages.
+      return self.clients.openWindow(new URL(ml ? `?action=log&ml=${ml}` : '', self.registration.scope))
     })(),
   )
 })
